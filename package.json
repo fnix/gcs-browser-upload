@@ -1,5 +1,5 @@
 {
-  "name": "gcs-browser-upload",
+  "name": "@fnix/gcs-browser-upload",
   "version": "1.0.1",
   "description": "Resumable, chunked uploads to Google Cloud Storage from the browser",
   "main": "dist/Upload.js",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/qubitdigital/gcs-browser-upload.git"
+    "url": "git+https://github.com/fnix/gcs-browser-upload.git"
   },
-  "author": "Qubit",
+  "author": "Kadu Diógenes",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/qubitdigital/gcs-browser-upload/issues"
+    "url": "https://github.com/fnix/gcs-browser-upload/issues"
   },
-  "homepage": "https://github.com/qubitdigital/gcs-browser-upload#readme",
+  "homepage": "https://github.com/fnix/gcs-browser-upload#readme",
   "devDependencies": {
     "babel-cli": "^6.14.0",
     "babel-core": "^6.7.4",
