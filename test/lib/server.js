@@ -74,6 +74,7 @@ export async function start () {
   app.use('/file', router)
   server = await pify(::app.listen)(port)
   axios.defaults.baseURL = `http://localhost:${port}`
+  axios.defaults.validateStatus = false
 }
 
 export function resetServer () {
