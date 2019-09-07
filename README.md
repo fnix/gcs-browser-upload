@@ -1,4 +1,4 @@
-# gcs-browser-upload [ ![Codeship Status for qubitdigital/gcs-browser-upload](https://codeship.com/projects/cc1d14a0-d19a-0133-39c4-66c9b913d1be/status?branch=master)](https://codeship.com/projects/141578)
+# gcs-browser-upload [ ![Codeship Status for qubitdigital/gcs-browser-upload](https://codeship.com/projects/a9a3f9a0-b3b0-0137-978c-1a359acd0e85/status?branch=master)](https://codeship.com/projects/363673)
 
 Chunked, pausable, recoverable uploading to Google Cloud Storage directly from the browser.
 
