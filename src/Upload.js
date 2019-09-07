@@ -25,7 +25,7 @@ export default class Upload {
       chunkSize: MIN_CHUNK_SIZE,
       storage: window.localStorage,
       contentType: 'text/plain',
-      onChunkUpload: () => {},
+      onChunkUpload: () => { },
       id: null,
       url: null,
       file: null,
@@ -49,7 +49,7 @@ export default class Upload {
     this.opts = opts
     this.meta = new FileMeta(opts.id, opts.file.size, opts.chunkSize, opts.storage)
     this.processor = new FileProcessor(opts.file, opts.chunkSize)
-    this.lastResult = null;
+    this.lastResult = null
   }
 
   async start () {
@@ -85,9 +85,20 @@ export default class Upload {
       const start = index * opts.chunkSize
       const end = index * opts.chunkSize + chunk.byteLength - 1
 
-      const headers = {
-        'Content-Type': opts.contentType,
-        'Content-Range': `bytes ${start}-${end}/${total}`
+      const options = {
+        headers: {
+          'Content-Type': opts.contentType,
+          'Content-Range': `bytes ${start}-${end}/${total}`
+        },
+        onUploadProgress: (progressEvent) => {
+          opts.onChunkUpload({
+            totalBytes: total,
+            uploadedBytes: start + progressEvent.loaded,
+            chunkIndex: index,
+            chunkLength: chunk.byteLength
+          })
+        },
+        validateStatus: false
       }
 
       debug(`Uploading chunk ${index}:`)
@@ -95,8 +106,8 @@ export default class Upload {
       debug(` - Start: ${start}`)
       debug(` - End: ${end}`)
 
-      const res = await safePut(opts.url, chunk, { headers })
-      this.lastResult = res;
+      const res = await safePut(opts.url, chunk, options)
+      this.lastResult = res
       checkResponseStatus(res, opts, [200, 201, 308])
       debug(`Chunk upload succeeded, adding checksum ${checksum}`)
       meta.addChecksum(index, checksum)
@@ -119,11 +130,14 @@ export default class Upload {
     }
 
     const getRemoteResumeIndex = async () => {
-      const headers = {
-        'Content-Range': `bytes */${opts.file.size}`
+      const options = {
+        headers: {
+          'Content-Range': `bytes */${opts.file.size}`
+        },
+        validateStatus: false
       }
       debug('Retrieving upload status from GCS')
-      const res = await safePut(opts.url, null, { headers })
+      const res = await safePut(opts.url, null, options)
 
       checkResponseStatus(res, opts, [308])
       const header = res.headers['range']
