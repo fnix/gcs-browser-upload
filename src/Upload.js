@@ -15,7 +15,7 @@ import {
 } from './errors'
 import * as errors from './errors'
 
-const MIN_CHUNK_SIZE = 262144
+const MIN_CHUNK_SIZE = 5242880 // 5mb
 
 export default class Upload {
   static errors = errors;
