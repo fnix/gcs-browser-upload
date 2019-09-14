@@ -113,9 +113,9 @@ export default class Upload {
 
       const res = await pRetry(async () => {
         const current_res = await safePut(opts.url, chunk, options)
-        
+
         checkResponseStatus(current_res, opts, [200, 201, 308])
-        
+
         return current_res
       })
       this.lastResult = res
