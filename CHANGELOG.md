@@ -21,3 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Increase the transmission chunk size to 5mb.
 - Only checks the two last uploaded chunks (10mb) before starting a resume operation.
+
+[Unreleased]: https://github.com/fnix/gcs-browser-upload/compare/v1.0.4...HEAD
+[1.0.4]: https://github.com/fnix/gcs-browser-upload/compare/v1.0.3...v1.0.4
+[1.0.3]: https://github.com/fnix/gcs-browser-upload/compare/1e4600fb4f117a6f997a3162a039e28e9686cf24...v1.0.3
