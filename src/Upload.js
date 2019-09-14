@@ -31,6 +31,7 @@ export default class Upload {
       id: null,
       url: null,
       file: null,
+      retries: 10,
       ...args
     }
 
@@ -114,10 +115,18 @@ export default class Upload {
       const res = await pRetry(async () => {
         const current_res = await safePut(opts.url, chunk, options)
 
-        checkResponseStatus(current_res, opts, [200, 201, 308])
+        try {
+          checkResponseStatus(current_res, opts, [200, 201, 308])
+        } catch (e) {
+          if (e instanceof UrlNotFoundError) {
+            throw new pRetry.AbortError(e)
+          } else {
+            throw e
+          }
+        }
 
         return current_res
-      })
+      }, { retries: opts.retries })
       this.lastResult = res
       debug(`Chunk upload succeeded, adding checksum ${checksum}`)
       meta.addChecksum(index, checksum, state)

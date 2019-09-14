@@ -14,7 +14,7 @@ describe('Functional', () => {
   let file = null
   let requests = []
 
-  async function doUpload (length, url) {
+  async function doUpload (length, url, retries = 10) {
     if (length !== null) {
       file = randomString({ length })
     }
@@ -22,7 +22,8 @@ describe('Functional', () => {
       id: 'foo',
       url: url || '/file',
       chunkSize: 256,
-      file: makeFile(file)
+      file: makeFile(file),
+      retries: retries
     }, true)
     await upload.start()
     requests = getRequests()
@@ -168,7 +169,7 @@ describe('Functional', () => {
 
   describe('an upload that results in a server error', () => {
     it('should throw an UploadFailedError', () => {
-      return expect(doUpload(200, '/file/fail')).to.be.rejectedWith(Upload.errors.UploadFailedError)
+      return expect(doUpload(200, '/file/fail', 0)).to.be.rejectedWith(Upload.errors.UploadFailedError)
     })
   })
 })
