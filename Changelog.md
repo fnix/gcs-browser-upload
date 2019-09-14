@@ -5,6 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unrelease]
 
+## [1.0.4] - 2019-04-14
+### Fixed
+- The exponential backoff changed a bit the upload semantics, breaking the tests. This release maintains the pre-1.0.3
+  semantics, making all green again!
+
 ## [1.0.3] - 2019-09-14
 ### Added
 - Exponential backoff to retry failed chunk transmissions.
