@@ -50,7 +50,7 @@ export default class Upload {
 
     this.opts = opts
     this.meta = new FileMeta(opts.id, opts.file.size, opts.chunkSize, opts.storage)
-    this.processor = new FileProcessor(opts.file, opts.chunkSize)
+    this.processor = new FileProcessor(opts.file, this.meta, opts.chunkSize)
     this.lastResult = null
   }
 
@@ -82,7 +82,7 @@ export default class Upload {
       await processor.run(uploadChunk, resumeIndex)
     }
 
-    const uploadChunk = async (checksum, index, chunk) => {
+    const uploadChunk = async (checksum, state, index, chunk) => {
       const total = opts.file.size
       const start = index * opts.chunkSize
       const end = index * opts.chunkSize + chunk.byteLength - 1
@@ -117,7 +117,7 @@ export default class Upload {
       })
       this.lastResult = res
       debug(`Chunk upload succeeded, adding checksum ${checksum}`)
-      meta.addChecksum(index, checksum)
+      meta.addChecksum(index, checksum, state)
 
       opts.onChunkUpload({
         totalBytes: total,
@@ -127,7 +127,7 @@ export default class Upload {
       })
     }
 
-    const validateChunk = async (newChecksum, index) => {
+    const validateChunk = async (newChecksum, _state, index) => {
       const originalChecksum = meta.getChecksum(index)
       const isChunkValid = originalChecksum === newChecksum
       if (!isChunkValid) {

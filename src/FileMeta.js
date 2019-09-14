@@ -44,15 +44,19 @@ export default class FileMeta {
     return this.getMeta().fileSize
   }
 
-  addChecksum (index, checksum) {
+  addChecksum (index, checksum, state) {
     let meta = this.getMeta()
-    meta.checksums[index] = checksum
+    meta.checksums[index] = { checksum: checksum, state: state }
     meta.started = true
     this.setMeta(meta)
   }
 
   getChecksum (index) {
-    return this.getMeta().checksums[index]
+    return this.getMeta().checksums[index].checksum
+  }
+
+  getSparkMD5State (index) {
+    return this.getMeta().checksums[index].state
   }
 
   reset () {

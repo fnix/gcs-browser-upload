@@ -3,9 +3,10 @@ import SparkMD5 from 'spark-md5'
 import debug from './debug'
 
 class FileProcessor {
-  constructor (file, chunkSize) {
+  constructor (file, meta, chunkSize) {
     this.paused = false
     this.file = file
+    this.meta = meta
     this.chunkSize = chunkSize
     this.unpauseHandlers = []
   }
@@ -14,6 +15,10 @@ class FileProcessor {
     const { file, chunkSize } = this
     const totalChunks = Math.ceil(file.size / chunkSize)
     let spark = new SparkMD5.ArrayBuffer()
+    if (startIndex > 0) {
+      debug('Restoring SparkMD5 state for the last chunck')
+      spark.setState(this.meta.getSparkMD5State(startIndex - 1))
+    }
 
     debug('Starting run on file:')
     debug(` - Total chunks: ${totalChunks}`)
@@ -32,9 +37,9 @@ class FileProcessor {
       const start = index * chunkSize
       const section = file.slice(start, start + chunkSize)
       const chunk = await getData(file, section)
-      const checksum = getChecksum(spark, chunk)
+      const checksum = computeChecksum(spark, chunk)
 
-      const shouldContinue = await fn(checksum, index, chunk)
+      const shouldContinue = await fn(checksum, spark.getState(), index, chunk)
       if (shouldContinue !== false) {
         await processIndex(index + 1)
       }
@@ -60,7 +65,7 @@ class FileProcessor {
   }
 }
 
-function getChecksum (spark, chunk) {
+function computeChecksum (spark, chunk) {
   spark.append(chunk)
   const state = spark.getState()
   const checksum = spark.end()
