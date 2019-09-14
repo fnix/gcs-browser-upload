@@ -67,7 +67,10 @@ export default class Upload {
       debug(` - Local index: ${localResumeIndex}`)
 
       try {
-        await processor.run(validateChunk, 0, resumeIndex)
+        let startResumeIndex = resumeIndex - 2
+        if (startResumeIndex < 0) startResumeIndex = 0
+
+        await processor.run(validateChunk, startResumeIndex, resumeIndex)
       } catch (e) {
         debug('Validation failed, starting from scratch')
         debug(` - Failed chunk index: ${e.chunkIndex}`)
