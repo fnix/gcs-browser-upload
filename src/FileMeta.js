@@ -56,7 +56,7 @@ export default class FileMeta {
   }
 
   getSparkMD5State (index) {
-    return this.getMeta().checksums[index].state
+    return JSON.parse(this.getMeta().checksums[index].state)
   }
 
   reset () {
