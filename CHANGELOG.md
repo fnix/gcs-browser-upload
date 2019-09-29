@@ -8,11 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.5] - 2019-09-29
 ### Added
 - Ensures successfull file transmision by checking GCS response headers containing chunk and file checksums,
-  re-transmitting chunks when they differ. 64b6f47ba063aeb8d81d833c8b7f562da9ed6df7
+  re-transmitting chunks when they differ.
 
 ### Fixed
 - SparkMD5 states was being saved/restored without cloning the structure, causing the values to be changed in unexpected
-  ways and giving wrong checksum values. 924f1dd9700d3c95c65e131c2fb20d5e95468c3c
+  ways and giving wrong checksum values.
 
 ## [1.0.4] - 2019-09-14
 ### Fixed
