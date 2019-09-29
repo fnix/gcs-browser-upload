@@ -117,6 +117,7 @@ export default class Upload {
 
         try {
           checkResponseStatus(current_res, opts, [200, 201, 308])
+          checkResponseHeaders(current_res, { index, end, checksum })
         } catch (e) {
           if (e instanceof UrlNotFoundError) {
             throw new pRetry.AbortError(e)
@@ -200,6 +201,12 @@ export default class Upload {
   }
 }
 
+function hexToBase64 (hexstring) {
+  return btoa(hexstring.match(/\w{2}/g).map(function (a) {
+    return String.fromCharCode(parseInt(a, 16))
+  }).join(''))
+}
+
 function checkResponseStatus (res, opts, allowed = []) {
   const { status } = res
   if (allowed.indexOf(status) > -1) {
@@ -225,6 +232,26 @@ function checkResponseStatus (res, opts, allowed = []) {
 
     default:
       throw new UnknownResponseError(res)
+  }
+}
+
+function checkResponseHeaders (res, chunkInfo) {
+  const { headers } = res
+  const receivedMD5 = headers['x-goog-hash'] || headers['x-range-md5']
+
+  if (!receivedMD5) return
+
+  if (headers['x-goog-hash'] &&
+      (chunkInfo.end + 1) === headers['x-goog-stored-content-length'] &&
+      receivedMD5.match(/md5=(.*)/)[1] !== hexToBase64(chunkInfo.checksum)) {
+    throw new DifferentChunkError(chunkInfo.index, hexToBase64(chunkInfo.checksum), receivedMD5)
+  } else if (headers['range']) {
+    const range = headers['range'].match(/(\d+?)-(\d+?)$/)
+    const bytesReceived = parseInt(range[2])
+
+    if (bytesReceived === chunkInfo.end && receivedMD5 !== chunkInfo.checksum) {
+      throw new DifferentChunkError(chunkInfo.index, chunkInfo.checksum, receivedMD5)
+    }
   }
 }
 

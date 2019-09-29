@@ -2,7 +2,7 @@ export default function makeFile (data) {
   return {
     size: data.length,
     name: 'foo',
-    buffer: new Buffer(data),
+    buffer: Buffer.from(data),
     slice: (start, end) => makeFile(data.substring(start, end))
   }
 }

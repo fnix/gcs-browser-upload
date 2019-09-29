@@ -14,7 +14,7 @@ describe('Functional', () => {
   let file = null
   let requests = []
 
-  async function doUpload (length, url, retries = 10) {
+  async function doUpload (length, url, retries = 2) {
     if (length !== null) {
       file = randomString({ length })
     }

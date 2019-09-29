@@ -59,6 +59,7 @@
   "standard": {
     "parser": "babel-eslint",
     "global": [
+      "btoa",
       "describe",
       "it",
       "beforeEach",
