@@ -37,7 +37,7 @@
     "get-port": "^2.1.0",
     "localStorage": "^1.0.3",
     "mkdirp": "^0.5.1",
-    "mocha": "^2.4.5",
+    "mocha": "^6.2.1",
     "pify": "^2.3.0",
     "random-string": "^0.1.2",
     "sinon": "^1.17.3",
@@ -45,7 +45,7 @@
     "standard": "^6.0.8"
   },
   "dependencies": {
-    "axios": "^0.14.0",
+    "axios": "^0.18.1",
     "debug": "^2.2.0",
     "es6-error": "^2.1.0",
     "es6-promise": "^3.1.2",

@@ -11,7 +11,7 @@ lint:
 	@$(BIN)/standard
 
 test: lint
-	@NODE_ENV=test $(BIN)/mocha $(TESTS)
+	@NODE_ENV=test $(BIN)/mocha --exit $(TESTS)
 
 test-watch:
 	@NODE_ENV=test $(BIN)/mocha -w $(TESTS)
